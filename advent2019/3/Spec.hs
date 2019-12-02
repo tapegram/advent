@@ -8,16 +8,27 @@ getOpcode (1: b: c: d: _) = Add b c d
 getOpcode (2: b: c: d: _) = Multiply b c d
 getOpcode _ = Terminate
 
-replace :: Integer -> a -> [a] -> [a]
+replace :: Integer -> Integer -> [Integer] -> [Integer]
 replace i val list = let (x, _ : xs) = splitAt (fromIntegral i) list in x ++ val : xs
 
-processOpcode :: Opcode Integer Integer Integer -> [Integer] -> [Integer]
-processOpcode (Add l1 l2 l3) (x:xs)  = replace l3 ((x:xs)!!(fromIntegral l1) + (x:xs)!!(fromIntegral l2)) (x:xs)
-processOpcode _ _ = []
+index :: Integer -> [Integer] -> Integer
+index i (x:xs) = (x:xs)!!(fromIntegral i)
+index _ [] = -9999999999999  -- This is bad :(
 
-run :: [Integer] -> [Integer]
-run [] = []
-run (x:xs) = (x:xs)
+processOpcode :: Opcode Integer Integer Integer -> [Integer] -> [Integer]
+processOpcode (Add l1 l2 l3) (x:xs)      = let val = (index l1 (x:xs)) + (index l2 (x:xs))
+                                           in replace l3 val (x:xs)
+
+processOpcode (Multiply l1 l2 l3) (x:xs) = let val = (index l1 (x:xs)) * (index l2 (x:xs))
+                                           in replace l3 val (x:xs)
+
+processOpcode Terminate (x:xs)           = (x:xs)
+processOpcode _ _                        = []
+
+run :: Integer -> [Integer] -> [Integer]
+run _ [] = []
+run i (x:xs) = let (_, y: ys) = splitAt (fromIntegral i) (x:xs)
+               in run (i+4) (processOpcode (getOpcode (y:ys)) (x:xs))
 
 main :: IO ()
 main = hspec $ do
@@ -41,8 +52,12 @@ main = hspec $ do
 
   describe "Process Opcode" $ do
     it "Add" $ do
-      processOpcode (Add 1 2 3) [1, 2, 3, 4] `shouldBe` [1, 2, 3, 8]
+      processOpcode (Add 1 2 3) [1, 2, 3, 4] `shouldBe` [1, 2, 3, 5]
+    it "Multiply" $ do
+      processOpcode (Multiply 1 2 3) [1, 2, 3, 4] `shouldBe` [1, 2, 3, 6]
+    it "Terminate" $ do
+      processOpcode Terminate [1, 2, 3, 4] `shouldBe` [1, 2, 3, 4]
 
   describe "Run program" $ do
     it "[1,0,0,0,99]" $ do
-      run [1, 0, 0, 0, 99] `shouldBe` [2,0,0,0,99]
+      run 0 [1, 0, 0, 0, 99] `shouldBe` [2,0,0,0,99]
