@@ -48,7 +48,7 @@ createProgram _ _ _ = error "Bad Program"
 
 getAllResults :: Program -> Noun -> [Result Noun Verb Output]
 getAllResults p noun
-  | noun < 100               = getAllResultsForVerb p noun 0 ++ getAllResults p (noun+1)
+  | noun < 100 = getAllResultsForVerb p noun 0 ++ getAllResults p (noun+1)
   | otherwise  = []
 
 getAllResultsForVerb :: Program -> Noun -> Verb -> [Result Noun Verb Output]
