@@ -69,8 +69,21 @@ main = hspec $ do
 
     it "right 1" $ do
       wireFromVectors (Coord 0 0) [R 1]
+        `shouldBe` [Coord 1 0]
+
+    it "do a lap" $ do
+      wireFromVectors (Coord 0 0) [U 3, R 2, D 4, L 1]
         `shouldBe` [
-        Coord 1 0
+        Coord 0 1,
+        Coord 0 2,
+        Coord 0 3,
+        Coord 1 3,
+        Coord 2 3,
+        Coord 2 2,
+        Coord 2 1,
+        Coord 2 0,
+        Coord 2 (-1),
+        Coord 1 (-1)
                    ]
 
   describe "distanceToClosestIntersection" $ do
