@@ -44,6 +44,13 @@ main = hspec $ do
                   (wireFromVectors (Coord 0 0) [U 62, R 66,U 55, R 34, D 71, R 55, D 58, R 83]))
         `shouldBe` 159
 
+    it "example 2" $ do
+      distanceToClosestIntersection
+        (Coord 0 0)
+        (TwoWires (wireFromVectors (Coord 0 0) [R 98, U 47, R 26, D 63, R 33, U 87, L 62, D 20, R 33, U 53, R 51])
+                  (wireFromVectors (Coord 0 0) [U 98, R 91, D 20, R 16, D 67, R 40, U 7, R 15, U 6, R 7]))
+        `shouldBe` 135
+
   describe "wireFromVectors" $ do
 
     it "up 3" $ do
