@@ -11,8 +11,16 @@ data TwoWires a b = TwoWires a b deriving (Show, Eq)
 wireFromVectors :: Coord Integer Integer -> [Vector Distance] -> Wire
 wireFromVectors c ((U 0) : vs) = wireFromVectors c vs
 wireFromVectors (Coord x y) ((U s) : vs) = (Coord x (y+1)) : wireFromVectors (Coord x (y+1)) ((U (s-1)) : vs)
+
 wireFromVectors c ((D 0) : vs) = wireFromVectors c vs
 wireFromVectors (Coord x y) ((D s) : vs) = (Coord x (y-1)) : wireFromVectors (Coord x (y-1)) ((D (s-1)) : vs)
+
+wireFromVectors c ((L 0) : vs) = wireFromVectors c vs
+wireFromVectors (Coord x y) ((L s) : vs) = (Coord (x-1) y) : wireFromVectors (Coord (x-1) y) ((L (s-1)) : vs)
+
+wireFromVectors c ((R 0) : vs) = wireFromVectors c vs
+wireFromVectors (Coord x y) ((R s) : vs) = (Coord (x+1) y) : wireFromVectors (Coord (x+1) y) ((R (s-1)) : vs)
+
 wireFromVectors _ _ = []
 
 distanceToClosestIntersection :: Coord Integer Integer -> TwoWires Wire Wire -> Distance
@@ -48,6 +56,21 @@ main = hspec $ do
         `shouldBe` [
         Coord 0 (-1),
         Coord 0 (-2)
+                   ]
+
+    it "left 4" $ do
+      wireFromVectors (Coord 0 0) [L 4]
+        `shouldBe` [
+        Coord (-1) 0,
+        Coord (-2) 0,
+        Coord (-3) 0,
+        Coord (-4) 0
+                   ]
+
+    it "right 1" $ do
+      wireFromVectors (Coord 0 0) [R 1]
+        `shouldBe` [
+        Coord 1 0
                    ]
 
   describe "distanceToClosestIntersection" $ do
