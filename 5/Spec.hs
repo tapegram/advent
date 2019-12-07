@@ -63,6 +63,13 @@ main = hspec $ do
     it "x negative difference 4" $ do
       manhattanDistance (Coord (-2) 0) (Coord 1 0) `shouldBe` 3
 
+    it "+/+ +/+" $ do
+      manhattanDistance (Coord 3 4) (Coord 2 1) `shouldBe` 4
+    it "-/+ +/+" $ do
+      manhattanDistance (Coord (-3) 4) (Coord 2 1) `shouldBe` 8
+    it "+/- +/+" $ do
+      manhattanDistance (Coord 3 (-4)) (Coord 2 1) `shouldBe` 6
+
 
   describe "findIntersections" $ do
 
