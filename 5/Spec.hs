@@ -1,5 +1,6 @@
 import Test.Hspec
 import Prelude
+import Data.List
 
 data Vector scalar = R scalar | L scalar | U scalar | D scalar deriving (Show, Eq)
 data Coord x y = Coord x y deriving (Show, Eq)
@@ -11,7 +12,7 @@ data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
 
 findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
-findIntersections _ = []
+findIntersections (TwoWires x y) = intersect x y
 
 main :: IO ()
 main = hspec $ do
