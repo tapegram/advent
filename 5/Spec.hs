@@ -23,5 +23,7 @@ main = hspec $ do
   --       `shouldBe` 159
 
   describe "findIntersections" $ do
-    it "no paths" $ do
+    it "no paths should return no intersections" $ do
       findIntersections [] `shouldBe` []
+    it "one path should return no intersections" $ do
+      findIntersections [[Coord 0 0, Coord 1 0, Coord 2 2]] `shouldBe` []
