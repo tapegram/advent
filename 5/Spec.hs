@@ -25,7 +25,7 @@ main = hspec $ do
 
   describe "findIntersections" $ do
 
-    it "two wires with no intersections" $ do
+    it "no intersections" $ do
       findIntersections (
         TwoWires
         [Coord 1 0, Coord 1 1, Coord 1 2]
@@ -33,10 +33,26 @@ main = hspec $ do
         )
          `shouldBe` []
 
-    it "two paths with one intersection" $ do
+    it "one intersection" $ do
       findIntersections (
         TwoWires
         [Coord 1 0, Coord 1 1, Coord 1 2]
         [Coord 2 0, Coord 1 1, Coord 2 2]
         )
          `shouldBe` [Coord 1 1]
+
+    it "two intersections" $ do
+      findIntersections (
+        TwoWires
+        [Coord 1 0, Coord 1 1, Coord 1 2, Coord 2 0]
+        [Coord 2 0, Coord 2 1, Coord 2 2, Coord 1 1]
+        )
+         `shouldBe` [Coord 1 1, Coord 2 0]
+
+    it "all values are intersections" $ do
+      findIntersections (
+        TwoWires
+        [Coord 1 0, Coord 1 1, Coord 1 2]
+        [Coord 1 0, Coord 1 1, Coord 1 2]
+        )
+         `shouldBe` [Coord 1 0, Coord 1 1, Coord 1 2]
