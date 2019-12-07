@@ -1,16 +1,16 @@
 import Test.Hspec
 import Prelude
 
-type Distance = Integer
 data Vector scalar = R scalar | L scalar | U scalar | D scalar deriving (Show, Eq)
 data Coord x y = Coord x y deriving (Show, Eq)
-type Path = [Coord Integer Integer]
+type Wire = [Coord Integer Integer]
+data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
 -- getDistanceFromPortToOverlap :: [Vector Distance] -> Distance
 -- getDistanceFromPortToOverlap _ = 0
 
 
-findIntersections :: [Path] -> [Coord Integer Integer]
+findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
 findIntersections _ = []
 
 main :: IO ()
@@ -23,7 +23,19 @@ main = hspec $ do
   --       `shouldBe` 159
 
   describe "findIntersections" $ do
-    it "no paths should return no intersections" $ do
-      findIntersections [] `shouldBe` []
-    it "one path should return no intersections" $ do
-      findIntersections [[Coord 0 0, Coord 1 0, Coord 2 2]] `shouldBe` []
+
+    it "two wires with no intersections" $ do
+      findIntersections (
+        TwoWires
+        [Coord 1 0, Coord 1 1, Coord 1 2]
+        [Coord 2 0, Coord 2 1, Coord 2 2]
+        )
+         `shouldBe` []
+
+    it "two paths with one intersection" $ do
+      findIntersections (
+        TwoWires
+        [Coord 1 0, Coord 1 1, Coord 1 2]
+        [Coord 2 0, Coord 1 1, Coord 2 2]
+        )
+         `shouldBe` [Coord 1 1]
