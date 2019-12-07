@@ -10,7 +10,7 @@ data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
 
 distanceToClosestIntersection :: Coord Integer Integer -> TwoWires Wire Wire -> Distance
-distanceToClosestIntersection _ _ = 0
+distanceToClosestIntersection (Coord x y) (TwoWires w1 w2) = minimum $ map  (manhattanDistance (Coord x y)) $ findIntersections (TwoWires w1 w2)
 
 findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
 findIntersections (TwoWires x y) = intersect x y
@@ -34,6 +34,12 @@ main = hspec $ do
         (Coord 0 0)
         (TwoWires [Coord 0 0, Coord 0 1, Coord 0 2] [Coord 0 0, Coord 1 0, Coord 2 0])
         `shouldBe` 0
+
+    it "one intersection" $ do
+      distanceToClosestIntersection
+        (Coord 0 0)
+        (TwoWires [Coord 0 0, Coord 1 1, Coord 0 2] [Coord 1 1, Coord 2 0, Coord 3 0])
+        `shouldBe` 2
 
   describe "manhattanDistance" $ do
 
