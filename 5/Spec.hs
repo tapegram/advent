@@ -16,7 +16,7 @@ findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
 findIntersections (TwoWires x y) = intersect x y
 
 manhattanDistance :: Coord Integer Integer -> Coord Integer Integer -> Distance
-manhattanDistance (Coord x y) (Coord x' y') = abs $ y' - y
+manhattanDistance (Coord x y) (Coord x' y') = (abs $ x' - x) + (abs $ y' - y)
 
 main :: IO ()
 main = hspec $ do
@@ -47,7 +47,21 @@ main = hspec $ do
     it "y negative difference 3" $ do
       manhattanDistance (Coord 0 (-7)) (Coord 0 (-1)) `shouldBe` 6
     it "y negative difference 4" $ do
-      manhattanDistance (Coord 0 (-2)) (Coord 0 (1)) `shouldBe` 3
+      manhattanDistance (Coord 0 (-2)) (Coord 0 1) `shouldBe` 3
+
+    it "x difference 1" $ do
+      manhattanDistance (Coord 0 0) (Coord 1 0) `shouldBe` 1
+    it "x difference 2" $ do
+      manhattanDistance (Coord 7 5) (Coord 9 5) `shouldBe` 2
+
+    it "x negative difference" $ do
+      manhattanDistance (Coord 0 1) (Coord (-5) 1) `shouldBe` 5
+    it "x negative difference 2" $ do
+      manhattanDistance (Coord (-1) 1) (Coord (-5) 1) `shouldBe` 4
+    it "x negative difference 3" $ do
+      manhattanDistance (Coord (-7) 0) (Coord (-1) 0) `shouldBe` 6
+    it "x negative difference 4" $ do
+      manhattanDistance (Coord (-2) 0) (Coord 1 0) `shouldBe` 3
 
 
   describe "findIntersections" $ do
