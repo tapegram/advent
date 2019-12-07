@@ -9,6 +9,7 @@ type Wire = [Coord Integer Integer]
 data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
 wireFromVectors :: Coord Integer Integer -> [Vector Distance] -> Wire
+
 wireFromVectors c ((U 0) : vs) = wireFromVectors c vs
 wireFromVectors (Coord x y) ((U s) : vs) = (Coord x (y+1)) : wireFromVectors (Coord x (y+1)) ((U (s-1)) : vs)
 
@@ -21,7 +22,7 @@ wireFromVectors (Coord x y) ((L s) : vs) = (Coord (x-1) y) : wireFromVectors (Co
 wireFromVectors c ((R 0) : vs) = wireFromVectors c vs
 wireFromVectors (Coord x y) ((R s) : vs) = (Coord (x+1) y) : wireFromVectors (Coord (x+1) y) ((R (s-1)) : vs)
 
-wireFromVectors _ _ = []
+wireFromVectors _ [] = []
 
 distanceToClosestIntersection :: Coord Integer Integer -> TwoWires Wire Wire -> Distance
 distanceToClosestIntersection (Coord x y) (TwoWires w1 w2) =
@@ -35,13 +36,14 @@ manhattanDistance (Coord x y) (Coord x' y') = (abs $ x' - x) + (abs $ y' - y)
 
 main :: IO ()
 main = hspec $ do
-  -- describe "GetDistanceFromPortToOverlap" $ do
-  --   it "example 1" $ do
-  --     getDistanceFromPortToOverlap [
-  --       R 75,D 30,R 83,U 83, L 12, D 49, R 71, U 7, L 72, U 62, R 66,U 55, R 34, D 71, R 55, D 58, R 83
-  --                                  ]
-  --       `shouldBe` 159
-  --       `shouldBe` 159
+  describe "GetDistanceFromPortToOverlap" $ do
+    it "example 1" $ do
+      distanceToClosestIntersection
+        (Coord 0 0)
+        (TwoWires (wireFromVectors (Coord 0 0) [R 75,D 30,R 83,U 83, L 12, D 49, R 71, U 7, L 72])
+                  (wireFromVectors (Coord 0 0) [U 62, R 66,U 55, R 34, D 71, R 55, D 58, R 83]))
+        `shouldBe` 159
+
   describe "wireFromVectors" $ do
 
     it "up 3" $ do
