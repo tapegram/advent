@@ -8,9 +8,9 @@ data Coord x y = Coord x y deriving (Show, Eq)
 type Wire = [Coord Integer Integer]
 data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
--- getDistanceFromPortToOverlap :: [Vector Distance] -> Distance
--- getDistanceFromPortToOverlap _ = 0
 
+distanceToClosestIntersection :: Coord Integer Integer -> TwoWires Wire Wire -> Distance
+distanceToClosestIntersection _ _ = 0
 
 findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
 findIntersections (TwoWires x y) = intersect x y
@@ -26,6 +26,15 @@ main = hspec $ do
   --       R 75,D 30,R 83,U 83, L 12, D 49, R 71, U 7, L 72, U 62, R 66,U 55, R 34, D 71, R 55, D 58, R 83
   --                                  ]
   --       `shouldBe` 159
+  --       `shouldBe` 159
+  describe "distanceToClosestIntersection" $ do
+
+    it "one intersection on origin" $ do
+      distanceToClosestIntersection
+        (Coord 0 0)
+        (TwoWires [Coord 0 0, Coord 0 1, Coord 0 2] [Coord 0 0, Coord 1 0, Coord 2 0])
+        `shouldBe` 0
+
   describe "manhattanDistance" $ do
 
     it "Same coordinate" $ do
