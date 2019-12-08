@@ -1,10 +1,10 @@
 import Test.Hspec
 import Prelude
-import Data.List
+import qualified Data.Set as Set
 
 type Distance = Integer
 data Vector scalar = R scalar | L scalar | U scalar | D scalar deriving (Show, Eq)
-data Coord x y = Coord x y deriving (Show, Eq)
+data Coord x y = Coord x y deriving (Show, Eq, Ord)
 type Wire = [Coord Integer Integer]
 data TwoWires a b = TwoWires a b deriving (Show, Eq)
 
@@ -29,7 +29,7 @@ distanceToClosestIntersection (Coord x y) (TwoWires w1 w2) =
   minimum $ map (manhattanDistance (Coord x y)) $ findIntersections (TwoWires w1 w2)
 
 findIntersections :: TwoWires Wire Wire-> [Coord Integer Integer]
-findIntersections (TwoWires x y) = intersect x y
+findIntersections (TwoWires x y) = Set.toList $ Set.intersection (Set.fromList x) (Set.fromList y)
 
 manhattanDistance :: Coord Integer Integer -> Coord Integer Integer -> Distance
 manhattanDistance (Coord x y) (Coord x' y') = (abs $ x' - x) + (abs $ y' - y)
@@ -60,7 +60,7 @@ main = hspec $ do
                   (wireFromVectors (Coord 0 0) [
                       L 1009, U 399, R 373, U 980, L 48, U 638, R 725, U 775, R 714, D 530, L 887, D 576, L 682, D 940, L 371, D 621, L 342, D 482, R 676, D 445, R 752, U 119, L 361, D 444, L 769, D 854, L 874, U 259, R 332, U 218, R 866, U 28, L 342, D 233, L 958, U 649, R 998, U 262, L 8, D 863, L 283, D 449, L 73, D 438, L 516, D 54, R 964, D 981, R 338, U 332, L 761, U 704, L 705, D 468, L 115, U 834, R 367, D 156, R 480, U 27, R 846, U 73, R 846, D 720, R 811, D 466, L 407, U 928, R 816, U 50, R 90, D 893, L 930, D 833, L 159, D 972, L 823, U 868, R 689, D 558, L 777, D 13, R 844, D 8, L 168, U 956, L 111, D 462, L 667, U 559, L 839, U 503, R 906, D 838, R 83, D 323, L 782, U 588, R 599, D 233, L 700, U 679, L 51, U 779, L 110, D 260, L 201, U 992, L 43, D 557, L 628, D 875, L 201, U 535, L 246, D 976, L 546, D 22, R 600, D 301, L 542, D 41, R 532, U 316, L 765, D 310, L 666, D 369, R 853, U 684, L 457, U 816, L 667, U 758, R 798, U 959, R 893, D 185, L 842, U 168, R 68, D 348, R 394, D 296, R 966, D 511, L 319, U 717, L 57, U 129, R 843, U 439, L 744, D 870, L 162, D 991, R 77, D 565, R 494, U 601, L 851, U 748, L 96, U 124, L 379, D 446, L 882, U 371, R 133, U 820, L 935, D 704, L 670, D 911, L 182, U 138, R 844, U 926, L 552, D 716, L 849, U 624, R 723, U 117, R 252, D 737, L 216, U 796, R 156, U 322, R 812, D 390, L 50, D 493, L 665, U 314, L 584, U 798, L 11, U 524, R 171, U 837, R 981, U 32, L 277, U 650, L 865, U 28, R 399, U 908, R 652, D 543, L 779, D 406, L 839, D 198, L 190, D 319, L 776, U 752, R 383, D 884, R 385, D 682, R 729, D 163, R 252, U 533, L 690, D 767, R 533, D 147, R 366, U 716, R 548, U 171, R 932, U 720, L 9, D 39, R 895, U 850, L 276, D 988, L 528, U 551, L 262, D 480, L 275, D 567, R 70, D 599, L 814, U 876, R 120, U 93, L 565, U 795, L 278, D 41, R 695, D 693, R 208, U 272, L 923, U 498, R 238, U 268, L 244, U 278, R 965, U 395, R 990, U 329, L 478, D 245, R 980, D 473, L 702, U 396, R 358, U 636, R 400, D 919, R 240, U 780, L 251, D 633, L 55, D 723, L 529, U 319, L 299, D 89, L 251, D 557, L 705, D 705, L 391, D 58, R 241
                                                ]))
-        `shouldBe` 135
+        `shouldBe` 1337
 
   describe "wireFromVectors" $ do
 
